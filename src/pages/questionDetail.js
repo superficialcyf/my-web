@@ -15,7 +15,8 @@ const Panel = Collapse.Panel;
             answerList:[],
             modalVisible:false,
             title:'',
-            editorState:''
+            editorState:'',
+            hasAnswer:false
         }
         this.answerQuestion = this.answerQuestion.bind(this)
         this.modalCancle = this.modalCancle.bind(this)
@@ -26,18 +27,40 @@ const Panel = Collapse.Panel;
     componentDidMount(){
        const id = this.props.match.params.id;
        Get(
-        'getQuestion',
-        {_id:id},
-        (data)=>{
-            this.setState({
-                questionDetail:data[0].data[0],
-                title:data[0].data[0].title
-            })
-        },
-        (data)=>{
-            console.log(data)
-        }
-    )
+            'getQuestion',
+            {_id:id},
+            (data)=>{
+                this.setState({
+                    questionDetail:data[0].data[0],
+                    title:data[0].data[0].title
+                })
+            },
+            (data)=>{
+                console.log(data)
+            }
+        )
+        Get(
+            'getAnswer',
+            {belong:id},
+            (data)=>{
+                if(data[0].data){
+                    this.setState({
+                        hasAnswer:true,
+                        loading:false,
+                        answerList:data[0].data
+                    })
+                }else{
+                    this.setState({
+                        hasAnswer:false,
+                        loading:false,
+                    })
+                }
+            },
+            (data)=>{
+                console.log(data)
+            }
+
+        )
     }
     answerQuestion(){
         if(!this.props.state.userid){
@@ -76,6 +99,7 @@ const Panel = Collapse.Panel;
             (data)=>{
                 message.success(data[0].msg)
                 this.setState({
+                    hasAnswer:true,
                     modalVisible:false,
                     loading:false,
                     answerList:data[0].data
@@ -118,23 +142,26 @@ const Panel = Collapse.Panel;
 
         return (
             <div id="questionDetail" style={{height:'100%',overflow:'auto'}}>
-               <Collapse
-                 bordered={false}
-                 defaultActiveKey={['1']}
-                 expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-               >
-                    <Panel style={PanelStyle} header={this.state.questionDetail.title} key="1"> 
-                        <div dangerouslySetInnerHTML = {{__html:this.state.questionDetail.answer}} ></div>
-                    </Panel>
-               </Collapse>
-               <div style={{textAlign:'right'}}>
-                   <Button onClick={this.answerQuestion} >解题</Button>
-               </div>
-               <section>
+                <div>
+                    <Collapse
+                        bordered={false}
+                        defaultActiveKey={['1']}
+                        expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                            <Panel style={PanelStyle} header={this.state.questionDetail.title} key="1"> 
+                                <div dangerouslySetInnerHTML = {{__html:this.state.questionDetail.answer}} ></div>
+                            </Panel>
+                    </Collapse>
+                    <div style={{textAlign:'right',padding:'10px',borderBottom:'1px dashed #e6e6e6'}}>
+                        <Button onClick={this.answerQuestion} >解题</Button>
+                    </div>
+                </div>
+               <section >
                    <Skeleton
                     active
                      loading={this.state.loading} 
                    >    
+                    {this.state.hasAnswer?'':<p style={{textAlign:'center',color:'#a5a0a0'}}>还没有任何人解答过，你来解答一下呗~</p>}
                         {this.state.answerList.map((item,index,arr)=>
                              <Comment
                              avatar={this.randStyle()}

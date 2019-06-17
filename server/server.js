@@ -140,7 +140,7 @@ app.use('/saveMessage',(req,res,next)=>{//保存留言/回复
         }
     })
 })
-app.use('/addAnswer',(req,res,next)=>{
+app.use('/addAnswer',(req,res,next)=>{//保存题目解答
     Answers.insertMany(req.body,(error,data)=>{
         if(error){
             res.json(data)
@@ -149,11 +149,24 @@ app.use('/addAnswer',(req,res,next)=>{
         }
     })
 },(req,res)=>{
-    Answers.find().populate('belong').populate('userid').sort('time').exec((error,data)=>{
+    Answers.find({'belong':req.body.belong}).populate('belong').populate('userid').sort('time').exec((error,data)=>{
         if(error){
             res.json(data)
         }else{
             res.json([{code:'0',data:data,msg:'回答完成！'}])
+        }
+    })
+})
+app.use('/getAnswer',(req,res)=>{
+    Answers.find(req.query,(error,data)=>{
+        if(error){
+            res.json(data)
+        }else{
+            if(data.length===0){
+                res.json([{code:'0',msg:'还没有任何人解答！'}])
+            }else{
+                res.json([{code:'0',msg:'查询成功！',data:data}])
+            }
         }
     })
 })

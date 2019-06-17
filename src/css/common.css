@@ -1,0 +1,13 @@
+@import "~antd/dist/antd.css";
+html,body,#root{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+.divider{
+    color: rgba(90, 218, 213, 1)!important;
+}
+.bf-content{
+    height: 450px!important;
+}

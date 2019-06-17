@@ -1,0 +1,26 @@
+.tips{
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+    margin: 15px 0;
+    border-bottom: 1px dashed #e6e6e6;
+}
+.tips-left{
+    width: 5px;
+    height: 100%;
+    background-color: aqua;
+    display: inline-block;
+}
+.tips-message{
+    display: inline-block;
+    height: 100%;
+    line-height: 30px;
+    vertical-align: top;
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: black;
+}
+article{
+    margin-bottom: 20px;
+}

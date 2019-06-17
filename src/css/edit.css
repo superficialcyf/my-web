@@ -1,0 +1,13 @@
+#edit{
+    height: 100%;
+}
+#edit .bf-container{
+    height: calc(100% - 21px);
+}
+#edit .bf-content{
+    height: calc(100% - 138px);
+}
+.btn-group{
+    text-align: center;
+    color: rgba(0, 0, 0, .3)
+}

@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import './css/main.css'
-import {Link,BrowserRouter as Router, Route} from 'react-router-dom'
+import {Link,BrowserRouter as Router, Route,Redirect} from 'react-router-dom'
 import {Row,Col,Layout} from 'antd'
 import {SetCookie,GetCookie} from './component/cookie'
 import {connect} from 'react-redux'
@@ -52,7 +52,14 @@ class Main extends Component{
                 userid:userid
               })
         }
-
+        const route = window.location.pathname;
+        switch(route){
+            case '/':this.setState({avtiveIndex:0});break;
+            case '/resume':this.setState({avtiveIndex:0});break;
+            case '/note':this.setState({avtiveIndex:1});break;
+            case '/question':this.setState({avtiveIndex:2});break;
+            case '/message':this.setState({avtiveIndex:3});break;
+        }
     }
 
     eventClickNav = (num)=>{
@@ -125,6 +132,8 @@ class Main extends Component{
                                 )}
                             </p>
                             <section className="route-change">
+                                {/* <Redirect path="/" to={{pathname: '/resume'}} /> */}
+                                <Route path="/" component={Resume} exact></Route>
                                 <Route path="/resume" component={Resume}/>
                                 <Route path="/note" component={Note}/>
                                 <Route path="/question" component={Questions}/>
